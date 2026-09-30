@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e5dea4264a.js" crossorigin="anonymous"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #080808; color: #fff; min-height: 100vh; }
+        #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-box { background: #1a1a1a; border: 1px solid #222; border-radius: 16px; padding: 50px 40px; width: 100%; max-width: 420px; text-align: center; }
+        .login-box .logo { width: 60px; height: 60px; background: #ff4321; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 26px; }
+        .login-box h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .login-box p { color: #ababab; font-size: 14px; margin-bottom: 32px; }
+        .login-box input { width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 14px 18px; color: #fff; font-size: 15px; margin-bottom: 14px; outline: none; transition: border-color 0.3s; }
+        .login-box input:focus { border-color: #ff4321; }
+        .login-error { background: rgba(255,67,33,0.1); border: 1px solid rgba(255,67,33,0.3); color: #ff6b4a; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+        #app { display: none; }
+        .layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 260px; background: #111; border-right: 1px solid #1f1f1f; padding: 24px 0; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-brand { padding: 0 24px 24px; border-bottom: 1px solid #1f1f1f; margin-bottom: 16px; }
+        .sidebar-brand h2 { font-size: 18px; font-weight: 700; }
+        .sidebar-brand h2 span { color: #ff4321; }
+        .sidebar-brand p { font-size: 12px; color: #ababab; margin-top: 4px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: #ababab; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; border-left: 3px solid transparent; }
+        .nav-item:hover { color: #fff; background: rgba(255,255,255,0.04); }
+        .nav-item.active { color: #ff4321; border-left-color: #ff4321; background: rgba(255,67,33,0.08); }
+        .nav-item i { width: 18px; font-size: 15px; }
+        .nav-badge { margin-left: auto; background: #ff4321; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+        .sidebar-bottom { margin-top: auto; padding: 16px 24px; border-top: 1px solid #1f1f1f; }
+        .logout-btn { display: flex; align-items: center; gap: 10px; color: #ababab; cursor: pointer; font-size: 14px; transition: color 0.2s; background: none; border: none; width: 100%; padding: 8px 0; }
+        .logout-btn:hover { color: #ff4321; }
+        .main { margin-left: 260px; width: calc(100% - 260px); padding: 32px; min-height: 100vh; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+        .page-header h1 { font-size: 26px; font-weight: 700; }
+        .page-header p { color: #ababab; font-size: 14px; margin-top: 4px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .stat-card { background: #1a1a1a; border: 1px solid #222; border-radius: 12px; padding: 24px; display: flex; align-items: center; gap: 16px; }
+        .stat-icon { width: 50px; height: 50px; background: rgba(255,67,33,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #ff4321; flex-shrink: 0; }
+        .stat-info span { font-size: 12px; color: #ababab; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-info h3 { font-size: 28px; font-weight: 700; margin-top: 2px; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+        .btn-primary { background: #ff4321; color: #fff; }
+        .btn-primary:hover { background: #e03518; transform: translateY(-1px); }
+        .btn-danger { background: rgba(255,67,33,0.15); color: #ff4321; border: 1px solid rgba(255,67,33,0.3); }
+        .btn-danger:hover { background: #ff4321; color: #fff; }
+        .btn-secondary { background: #2a2a2a; color: #fff; }
+        .btn-secondary:hover { background: #333; }
+        .btn-success { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+        .btn-success:hover { background: #4ade80; color: #080808; }
+        .btn-sm { padding: 6px 14px; font-size: 13px; }
+        .table-container { background: #1a1a1a; border: 1px solid #222; border-radius: 12px; overflow: hidden; }
+        .table-header { padding: 20px 24px; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: space-between; }
+        .table-header h3 { font-size: 16px; font-weight: 600; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { padding: 14px 24px; text-align: left; font-size: 12px; font-weight: 600; color: #ababab; text-transform: uppercase; letter-spacing: 0.5px; background: #141414; border-bottom: 1px solid #222; }
+        tbody td { padding: 16px 24px; font-size: 14px; border-bottom: 1px solid #1f1f1f; vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+        .tech-badge { display: inline-block; background: rgba(255,67,33,0.1); color: #ff4321; border: 1px solid rgba(255,67,33,0.2); padding: 3px 10px; border-radius: 10px; font-size: 12px; margin: 2px; }
+        .green-badge { display: inline-block; background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); padding: 3px 10px; border-radius: 10px; font-size: 12px; }
+        .empty-state { text-align: center; padding: 60px 24px; color: #ababab; }
+        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 15px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+        .modal-overlay.open { display: flex; }
+        .modal { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 32px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .modal-header h3 { font-size: 20px; font-weight: 600; }
+        .modal-close { background: none; border: none; color: #ababab; font-size: 20px; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: #ff4321; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 500; color: #ababab; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 14px; outline: none; transition: border-color 0.3s; font-family: 'Poppins', sans-serif; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #ff4321; }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+        .form-status { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 16px; display: none; }
+        .form-status.success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; display: flex; align-items: center; gap: 8px; }
+        .form-status.error { background: rgba(255,67,33,0.1); border: 1px solid rgba(255,67,33,0.3); color: #ff6b4a; display: flex; align-items: center; gap: 8px; }
+        .message-card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: border-color 0.3s; }
+        .message-card.unread { border-left: 3px solid #ff4321; }
+        .message-card:hover { border-color: #333; }
+        .message-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .message-sender { font-weight: 600; font-size: 15px; }
+        .message-email { color: #ababab; font-size: 13px; margin-top: 2px; }
+        .message-date { font-size: 12px; color: #ababab; }
+        .message-subject { font-size: 13px; color: #ff4321; font-weight: 500; margin-bottom: 8px; }
+        .message-body { font-size: 14px; color: #ccc; line-height: 1.7; }
+        .unread-dot { width: 8px; height: 8px; background: #ff4321; border-radius: 50%; display: inline-block; margin-right: 6px; }
+        .loading { text-align: center; padding: 40px; color: #ababab; }
+        .loading i { font-size: 32px; animation: spin 1s linear infinite; display: block; margin-bottom: 12px; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .confirm-overlay.open { display: flex; }
+        .confirm-box { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 32px; max-width: 400px; width: 90%; text-align: center; }
+        .confirm-box i { font-size: 40px; color: #ff4321; margin-bottom: 16px; display: block; }
+        .confirm-box h3 { font-size: 18px; margin-bottom: 8px; }
+        .confirm-box p { color: #ababab; font-size: 14px; margin-bottom: 24px; }
+        .confirm-actions { display: flex; gap: 12px; justify-content: center; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; accent-color: #ff4321; cursor: pointer; }
+        .checkbox-group label { font-size: 14px; color: #fff; cursor: pointer; text-transform: none; letter-spacing: 0; }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+    <div class="login-box">
+        <div class="logo"><i class="fa-solid fa-shield-halved"></i></div>
+        <h2>Admin Panel</h2>
+        <p>Sign in to manage your portfolio</p>
+        <div class="login-error" id="login-error"><i class="fa-solid fa-circle-exclamation"></i> Incorrect password.</div>
+        <input type="password" id="admin-password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') login()">
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;" onclick="login()">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h2>Portfolio <span>Admin</span></h2>
+                <p>Chathura Madusha</p>
+            </div>
+            <nav>
+                <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</div>
+                <div class="nav-item" onclick="showPage('projects')" id="nav-projects"><i class="fa-solid fa-folder-open"></i> Projects</div>
+                <div class="nav-item" onclick="showPage('skills')" id="nav-skills"><i class="fa-solid fa-code"></i> Skills</div>
+                <div class="nav-item" onclick="showPage('education')" id="nav-education"><i class="fa-solid fa-graduation-cap"></i> Education</div>
+                <div class="nav-item" onclick="showPage('services')" id="nav-services"><i class="fa-solid fa-briefcase"></i> What I Can Do</div>
+                <div class="nav-item" onclick="showPage('messages')" id="nav-messages">
+                    <i class="fa-solid fa-envelope"></i> Messages
+                    <span class="nav-badge" id="unread-badge" style="display:none">0</span>
+                </div>
+            </nav>
+            <div class="sidebar-bottom">
+                <a href="../frontend/index.html" target="_blank" class="btn btn-secondary btn-sm" style="margin-bottom:12px;width:100%;justify-content:center;">
+                    <i class="fa-solid fa-eye"></i> View Portfolio
+                </a>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- Dashboard -->
+            <div class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <div><h1>Dashboard</h1><p>Welcome back, Chathura! Here's your portfolio overview.</p></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div><div class="stat-info"><span>Projects</span><h3 id="stat-projects">0</h3></div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-code"></i></div><div class="stat-info"><span>Skills</span><h3 id="stat-skills">0</h3></div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div><div class="stat-info"><span>Education</span><h3 id="stat-education">0</h3></div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-envelope"></i></div><div class="stat-info"><span>Messages</span><h3 id="stat-messages">0</h3></div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa-solid fa-envelope-open"></i></div><div class="stat-info"><span>Unread</span><h3 id="stat-unread">0</h3></div></div>
+                </div>
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>Recent Messages</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="showPage('messages')">View All</button>
+                    </div>
+                    <div id="recent-messages-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="page" id="page-projects">
+                <div class="page-header">
+                    <div><h1>Projects</h1><p>Add, edit or remove your portfolio projects.</p></div>
+                    <button class="btn btn-primary" onclick="openAddProject()"><i class="fa-solid fa-plus"></i> Add Project</button>
+                </div>
+                <div class="table-container">
+                    <div class="table-header"><h3>All Projects</h3><span id="projects-count" style="color:#ababab;font-size:13px;"></span></div>
+                    <div id="projects-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="page" id="page-skills">
+                <div class="page-header">
+                    <div><h1>Skills</h1><p>Manage your skills and proficiency levels.</p></div>
+                    <button class="btn btn-primary" onclick="openAddSkill()"><i class="fa-solid fa-plus"></i> Add Skill</button>
+                </div>
+                <div class="table-container">
+                    <div class="table-header"><h3>All Skills</h3><span id="skills-count" style="color:#ababab;font-size:13px;"></span></div>
+                    <div id="skills-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="page" id="page-education">
+                <div class="page-header">
+                    <div><h1>Education</h1><p>Manage your education and qualifications.</p></div>
+                    <button class="btn btn-primary" onclick="openAddEducation()"><i class="fa-solid fa-plus"></i> Add Education</button>
+                </div>
+                <div class="table-container">
+                    <div class="table-header"><h3>All Education</h3><span id="education-count" style="color:#ababab;font-size:13px;"></span></div>
+                    <div id="education-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="page" id="page-services">
+                <div class="page-header">
+                    <div><h1>What I Can Do</h1><p>Manage your services and capabilities.</p></div>
+                    <button class="btn btn-primary" onclick="openAddService()"><i class="fa-solid fa-plus"></i> Add Service</button>
+                </div>
+                <div class="table-container">
+                    <div class="table-header"><h3>All Services</h3><span id="services-count" style="color:#ababab;font-size:13px;"></span></div>
+                    <div id="services-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="page" id="page-messages">
+                <div class="page-header">
+                    <div><h1>Messages</h1><p>Contact form submissions from your portfolio.</p></div>
+                </div>
+                <div id="messages-list"><div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div></div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="project-modal">
+    <div class="modal">
+        <div class="modal-header"><h3 id="modal-title">Add New Project</h3><button class="modal-close" onclick="closeModal('project-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="form-status" id="project-status"></div>
+        <div class="form-group"><label>Project Title *</label><input type="text" id="proj-title" placeholder="e.g. Social Media App"></div>
+        <div class="form-group"><label>Description *</label><textarea id="proj-desc" placeholder="Describe your project..."></textarea></div>
+        <div class="form-group"><label>Tech Stack *</label><input type="text" id="proj-tech" placeholder="e.g. Flutter · Firebase · Dart"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Live URL</label><input type="text" id="proj-live" placeholder="https://..."></div>
+            <div class="form-group"><label>GitHub URL</label><input type="text" id="proj-github" placeholder="https://github.com/..."></div>
+        </div>
+        <div class="form-group">
+            <label>Image Filename</label>
+            <input type="text" id="proj-image" placeholder="e.g. work-1.png">
+            <small style="color:#ababab;font-size:12px;margin-top:6px;display:block;">Place image in frontend/images/ folder.</small>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeModal('project-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveProject()" id="proj-save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Project</button>
+        </div>
+    </div>
+</div>
+
+<!-- SKILL MODAL -->
+<div class="modal-overlay" id="skill-modal">
+    <div class="modal">
+        <div class="modal-header"><h3 id="skill-modal-title">Add New Skill</h3><button class="modal-close" onclick="closeModal('skill-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="form-status" id="skill-status"></div>
+        <div class="form-group"><label>Skill Name *</label><input type="text" id="skill-name" placeholder="e.g. React.js"></div>
+        <div class="form-group">
+            <label>Category *</label>
+            <select id="skill-category">
+                <option value="">Select category</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Mobile & UI">Mobile & UI</option>
+                <option value="Backend & Tools">Backend & Tools</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeModal('skill-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveSkill()" id="skill-save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Skill</button>
+        </div>
+    </div>
+</div>
+
+<!-- EDUCATION MODAL -->
+<div class="modal-overlay" id="education-modal">
+    <div class="modal">
+        <div class="modal-header"><h3 id="edu-modal-title">Add Education</h3><button class="modal-close" onclick="closeModal('education-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="form-status" id="edu-status"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Year / Period *</label><input type="text" id="edu-year" placeholder="e.g. 2021 – Present"></div>
+            <div class="form-group"><label>Sort Order</label><input type="number" id="edu-order" placeholder="1" value="1"></div>
+        </div>
+        <div class="form-group"><label>Degree / Title *</label><input type="text" id="edu-degree" placeholder="e.g. Bachelor of Software Engineering"></div>
+        <div class="form-group"><label>Institution *</label><input type="text" id="edu-institution" placeholder="e.g. Open University of Sri Lanka"></div>
+        <div class="form-group"><label>Description *</label><textarea id="edu-description" placeholder="Describe your studies..."></textarea></div>
+        <div class="form-group">
+            <label>Status</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="edu-current">
+                <label for="edu-current">Currently Enrolled</label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeModal('education-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveEducation()" id="edu-save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Education</button>
+        </div>
+    </div>
+</div>
+
+<!-- SERVICE MODAL -->
+<div class="modal-overlay" id="service-modal">
+    <div class="modal">
+        <div class="modal-header"><h3 id="svc-modal-title">Add Service</h3><button class="modal-close" onclick="closeModal('service-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="form-status" id="svc-status"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Icon Class *</label>
+                <input type="text" id="svc-icon" placeholder="e.g. fa-solid fa-code">
+                <small style="color:#ababab;font-size:12px;margin-top:4px;display:block;">Find icons at fontawesome.com</small>
+            </div>
+            <div class="form-group"><label>Sort Order</label><input type="number" id="svc-order" placeholder="1" value="1"></div>
+        </div>
+        <div class="form-group"><label>Title *</label><input type="text" id="svc-title" placeholder="e.g. Web Development"></div>
+        <div class="form-group"><label>Description *</label><textarea id="svc-description" placeholder="Describe what you can do..."></textarea></div>
+        <div class="form-group"><label>Link</label><input type="text" id="svc-link" placeholder="#portfolio"></div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeModal('service-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveService()" id="svc-save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Service</button>
+        </div>
+    </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirm-dialog">
+    <div class="confirm-box">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <h3>Are you sure?</h3>
+        <p>This action cannot be undone. The item will be permanently removed.</p>
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmDelete()" id="confirm-delete-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const BACKEND        = 'http://localhost:3000';
+    const ADMIN_PASSWORD = 'portfolio@admin123';
+
+    let deleteId    = null;
+    let deleteType  = null;
+    let editingId   = null;
+    let allProjects = [];
+    let allSkills   = [];
+    let allMessages = [];
+    let allEducation= [];
+    let allServices = [];
+    let editSkillId = null;
+    let editEduId   = null;
+    let editSvcId   = null;
+
+    // ── Auth ──────────────────────────────────
+    function login() {
+        const pw = document.getElementById('admin-password').value;
+        if (pw === ADMIN_PASSWORD) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            loadDashboard();
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+            document.getElementById('admin-password').value = '';
+        }
+    }
+    function logout() {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+        document.getElementById('admin-password').value = '';
+    }
+
+    // ── Navigation ────────────────────────────
+    function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        document.getElementById('nav-' + page).classList.add('active');
+        const loaders = { dashboard: loadDashboard, projects: loadProjects, skills: loadSkills, education: loadEducation, services: loadServices, messages: loadMessages };
+        if (loaders[page]) loaders[page]();
+    }
+
+    // ── Modal helpers ─────────────────────────
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openModal(id)  { document.getElementById(id).classList.add('open'); }
+
+    // ── Confirm delete ────────────────────────
+    function closeConfirm() { deleteId = null; deleteType = null; document.getElementById('confirm-dialog').classList.remove('open'); }
+    async function confirmDelete() {
+        if (!deleteId || !deleteType) return;
+        const btn = document.getElementById('confirm-delete-btn');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        btn.disabled  = true;
+        const urls = { project: `/api/projects/${deleteId}`, skill: `/api/skills/${deleteId}`, education: `/api/education/${deleteId}`, service: `/api/services/${deleteId}` };
+        const reloaders = { project: loadProjects, skill: loadSkills, education: loadEducation, service: loadServices };
+        try {
+            const res  = await fetch(BACKEND + urls[deleteType], { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) { closeConfirm(); reloaders[deleteType](); loadDashboard(); }
+        } catch (err) { alert('Failed to delete.'); }
+        btn.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
+        btn.disabled  = false;
+    }
+    function askDelete(id, type) {
+        deleteId   = id;
+        deleteType = type;
+        document.getElementById('confirm-dialog').classList.add('open');
+    }
+
+    // ── Utilities ─────────────────────────────
+    function escHtml(text) {
+        return String(text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function formatDate(dateStr) {
+        return new Date(dateStr).toLocaleDateString('en-US', { day:'numeric', month:'short', year:'numeric' });
+    }
+    async function apiFetch(url, method='GET', body=null) {
+        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        if (body) opts.body = JSON.stringify(body);
+        const res  = await fetch(BACKEND + url, opts);
+        return res.json();
+    }
+    function setStatus(id, type, msg) {
+        const el = document.getElementById(id);
+        el.className = 'form-status ' + type;
+        el.innerHTML = `<i class="fa-solid fa-${type==='success'?'circle-check':'circle-exclamation'}"></i> ${msg}`;
+        el.style.display = 'flex';
+    }
+
+    // ── Dashboard ─────────────────────────────
+    async function loadDashboard() {
+        try {
+            const [pr, sk, ed, mg] = await Promise.all([
+                apiFetch('/api/projects'), apiFetch('/api/skills'),
+                apiFetch('/api/education'), apiFetch('/api/messages')
+            ]);
+            const messages = mg.data || [];
+            const unread   = messages.filter(m => !m.is_read).length;
+            document.getElementById('stat-projects').textContent  = (pr.data||[]).length;
+            document.getElementById('stat-skills').textContent    = (sk.data||[]).length;
+            document.getElementById('stat-education').textContent = (ed.data||[]).length;
+            document.getElementById('stat-messages').textContent  = messages.length;
+            document.getElementById('stat-unread').textContent    = unread;
+            const badge = document.getElementById('unread-badge');
+            if (unread > 0) { badge.textContent = unread; badge.style.display = 'inline'; } else { badge.style.display = 'none'; }
+            const c = document.getElementById('recent-messages-list');
+            if (!messages.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No messages yet</p></div>`; return; }
+            c.innerHTML = messages.slice(0,3).map(m => `
+                <div style="padding:16px 24px;border-bottom:1px solid #1f1f1f;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+                    <div>
+                        ${!m.is_read?'<span class="unread-dot"></span>':''}
+                        <strong style="font-size:14px;">${escHtml(m.name)}</strong>
+                        <span style="color:#ababab;font-size:13px;margin-left:8px;">${escHtml(m.email)}</span>
+                        <p style="font-size:13px;color:#ccc;margin-top:4px;">${escHtml(m.message.substring(0,80))}...</p>
+                    </div>
+                    <span style="font-size:12px;color:#ababab;white-space:nowrap;">${formatDate(m.received_at)}</span>
+                </div>`).join('');
+        } catch(e) { console.error(e); }
+    }
+
+    // ── Projects ──────────────────────────────
+    async function loadProjects() {
+        const c = document.getElementById('projects-list');
+        c.innerHTML = `<div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div>`;
+        try {
+            const data = await apiFetch('/api/projects');
+            allProjects = data.data || [];
+            document.getElementById('projects-count').textContent = `${allProjects.length} project${allProjects.length!==1?'s':''}`;
+            if (!allProjects.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No projects yet.</p></div>`; return; }
+            c.innerHTML = `<table><thead><tr><th>#</th><th>Title</th><th>Tech Stack</th><th>Actions</th></tr></thead><tbody>
+                ${allProjects.map((p,i) => `<tr>
+                    <td style="color:#ababab;">${i+1}</td>
+                    <td><strong>${escHtml(p.title)}</strong><p style="font-size:12px;color:#ababab;margin-top:4px;">${escHtml(p.description.substring(0,80))}...</p></td>
+                    <td>${p.tech_stack.split('·').map(t=>`<span class="tech-badge">${escHtml(t.trim())}</span>`).join('')}</td>
+                    <td><div style="display:flex;gap:8px;">
+                        <button class="btn btn-success btn-sm" onclick="openEditProject(${p.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="askDelete(${p.id},'project')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div></td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        } catch(e) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load.</p></div>`; }
+    }
+    function openAddProject() {
+        editingId = null;
+        document.getElementById('modal-title').textContent = 'Add New Project';
+        document.getElementById('proj-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Project';
+        ['proj-title','proj-desc','proj-tech','proj-live','proj-github','proj-image'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('project-status').style.display = 'none';
+        openModal('project-modal');
+    }
+    function openEditProject(id) {
+        const p = allProjects.find(p => p.id === id); if (!p) return;
+        editingId = id;
+        document.getElementById('modal-title').textContent = 'Edit Project';
+        document.getElementById('proj-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Project';
+        document.getElementById('proj-title').value  = p.title;
+        document.getElementById('proj-desc').value   = p.description;
+        document.getElementById('proj-tech').value   = p.tech_stack;
+        document.getElementById('proj-live').value   = p.live_url   || '';
+        document.getElementById('proj-github').value = p.github_url || '';
+        document.getElementById('proj-image').value  = p.image_url  || '';
+        document.getElementById('project-status').style.display = 'none';
+        openModal('project-modal');
+    }
+    async function saveProject() {
+        const title  = document.getElementById('proj-title').value.trim();
+        const desc   = document.getElementById('proj-desc').value.trim();
+        const tech   = document.getElementById('proj-tech').value.trim();
+        const btn    = document.getElementById('proj-save-btn');
+        if (!title || !desc || !tech) { setStatus('project-status','error','Please fill in all required fields.'); return; }
+        btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        try {
+            const data = await apiFetch(editingId?`/api/projects/${editingId}`:'/api/projects', editingId?'PUT':'POST',
+                { title, description: desc, tech_stack: tech, live_url: document.getElementById('proj-live').value.trim(), github_url: document.getElementById('proj-github').value.trim(), image_url: document.getElementById('proj-image').value.trim() });
+            if (data.success) { setStatus('project-status','success',data.message); setTimeout(()=>{ closeModal('project-modal'); loadProjects(); },1200); }
+            else setStatus('project-status','error',data.message);
+        } catch(e) { setStatus('project-status','error','Could not connect to server.'); }
+        btn.disabled = false; btn.innerHTML = editingId?'<i class="fa-solid fa-floppy-disk"></i> Update Project':'<i class="fa-solid fa-floppy-disk"></i> Save Project';
+    }
+
+    // ── Skills ────────────────────────────────
+    async function loadSkills() {
+        const c = document.getElementById('skills-list');
+        c.innerHTML = `<div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div>`;
+        try {
+            const data = await apiFetch('/api/skills');
+            allSkills = data.data || [];
+            document.getElementById('skills-count').textContent = `${allSkills.length} skill${allSkills.length!==1?'s':''}`;
+            if (!allSkills.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-code"></i><p>No skills yet.</p></div>`; return; }
+            c.innerHTML = `<table><thead><tr><th>Skill</th><th>Category</th><th>Actions</th></tr></thead><tbody>
+                ${allSkills.map(s=>`<tr>
+                    <td><strong>${escHtml(s.name)}</strong></td>
+                    <td><span class="tech-badge">${escHtml(s.category)}</span></td>
+                    <td><div style="display:flex;gap:8px;">
+                        <button class="btn btn-success btn-sm" onclick="openEditSkill(${s.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="askDelete(${s.id},'skill')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div></td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        } catch(e) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load.</p></div>`; }
+    }
+    function openAddSkill() {
+        editSkillId = null;
+        document.getElementById('skill-modal-title').textContent = 'Add New Skill';
+        document.getElementById('skill-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Skill';
+        document.getElementById('skill-name').value = '';
+        document.getElementById('skill-category').value = '';
+        document.getElementById('skill-status').style.display = 'none';
+        openModal('skill-modal');
+    }
+    function openEditSkill(id) {
+        const s = allSkills.find(s=>s.id===id); if (!s) return;
+        editSkillId = id;
+        document.getElementById('skill-modal-title').textContent = 'Edit Skill';
+        document.getElementById('skill-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Skill';
+        document.getElementById('skill-name').value = s.name;
+        document.getElementById('skill-category').value = s.category;
+        document.getElementById('skill-status').style.display = 'none';
+        openModal('skill-modal');
+    }
+    async function saveSkill() {
+        const name = document.getElementById('skill-name').value.trim();
+        const cat  = document.getElementById('skill-category').value;
+        const btn  = document.getElementById('skill-save-btn');
+        if (!name || !cat) { setStatus('skill-status','error','Please fill in all fields.'); return; }
+        btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        try {
+            const data = await apiFetch(editSkillId?`/api/skills/${editSkillId}`:'/api/skills', editSkillId?'PUT':'POST', { name, category: cat, percentage: 50 });
+            if (data.success) { setStatus('skill-status','success',data.message); setTimeout(()=>{ closeModal('skill-modal'); loadSkills(); },1200); }
+            else setStatus('skill-status','error',data.message);
+        } catch(e) { setStatus('skill-status','error','Could not connect to server.'); }
+        btn.disabled = false; btn.innerHTML = editSkillId?'<i class="fa-solid fa-floppy-disk"></i> Update Skill':'<i class="fa-solid fa-floppy-disk"></i> Save Skill';
+    }
+
+    // ── Education ─────────────────────────────
+    async function loadEducation() {
+        const c = document.getElementById('education-list');
+        c.innerHTML = `<div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div>`;
+        try {
+            const data = await apiFetch('/api/education');
+            allEducation = data.data || [];
+            document.getElementById('education-count').textContent = `${allEducation.length} record${allEducation.length!==1?'s':''}`;
+            if (!allEducation.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-graduation-cap"></i><p>No education records yet.</p></div>`; return; }
+            c.innerHTML = `<table><thead><tr><th>Year</th><th>Degree</th><th>Institution</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+                ${allEducation.map(e=>`<tr>
+                    <td style="color:#ababab;white-space:nowrap;">${escHtml(e.year)}</td>
+                    <td><strong>${escHtml(e.degree)}</strong><p style="font-size:12px;color:#ababab;margin-top:4px;">${escHtml(e.description.substring(0,60))}...</p></td>
+                    <td style="font-size:13px;color:#ccc;">${escHtml(e.institution)}</td>
+                    <td>${e.is_current?'<span class="green-badge">Current</span>':'<span style="color:#ababab;font-size:12px;">Completed</span>'}</td>
+                    <td><div style="display:flex;gap:8px;">
+                        <button class="btn btn-success btn-sm" onclick="openEditEducation(${e.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="askDelete(${e.id},'education')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div></td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        } catch(e) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load.</p></div>`; }
+    }
+    function openAddEducation() {
+        editEduId = null;
+        document.getElementById('edu-modal-title').textContent = 'Add Education';
+        document.getElementById('edu-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Education';
+        ['edu-year','edu-degree','edu-institution','edu-description'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('edu-order').value = 1;
+        document.getElementById('edu-current').checked = false;
+        document.getElementById('edu-status').style.display = 'none';
+        openModal('education-modal');
+    }
+    function openEditEducation(id) {
+        const e = allEducation.find(e=>e.id===id); if (!e) return;
+        editEduId = id;
+        document.getElementById('edu-modal-title').textContent = 'Edit Education';
+        document.getElementById('edu-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Education';
+        document.getElementById('edu-year').value        = e.year;
+        document.getElementById('edu-degree').value      = e.degree;
+        document.getElementById('edu-institution').value = e.institution;
+        document.getElementById('edu-description').value = e.description;
+        document.getElementById('edu-order').value       = e.sort_order;
+        document.getElementById('edu-current').checked   = e.is_current == 1;
+        document.getElementById('edu-status').style.display = 'none';
+        openModal('education-modal');
+    }
+    async function saveEducation() {
+        const year  = document.getElementById('edu-year').value.trim();
+        const deg   = document.getElementById('edu-degree').value.trim();
+        const inst  = document.getElementById('edu-institution').value.trim();
+        const desc  = document.getElementById('edu-description').value.trim();
+        const btn   = document.getElementById('edu-save-btn');
+        if (!year || !deg || !inst || !desc) { setStatus('edu-status','error','Please fill in all required fields.'); return; }
+        btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        try {
+            const data = await apiFetch(editEduId?`/api/education/${editEduId}`:'/api/education', editEduId?'PUT':'POST',
+                { year, degree: deg, institution: inst, description: desc, is_current: document.getElementById('edu-current').checked, sort_order: parseInt(document.getElementById('edu-order').value)||0 });
+            if (data.success) { setStatus('edu-status','success',data.message); setTimeout(()=>{ closeModal('education-modal'); loadEducation(); },1200); }
+            else setStatus('edu-status','error',data.message);
+        } catch(e) { setStatus('edu-status','error','Could not connect to server.'); }
+        btn.disabled = false; btn.innerHTML = editEduId?'<i class="fa-solid fa-floppy-disk"></i> Update Education':'<i class="fa-solid fa-floppy-disk"></i> Save Education';
+    }
+
+    // ── Services ──────────────────────────────
+    async function loadServices() {
+        const c = document.getElementById('services-list');
+        c.innerHTML = `<div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div>`;
+        try {
+            const data = await apiFetch('/api/services');
+            allServices = data.data || [];
+            document.getElementById('services-count').textContent = `${allServices.length} service${allServices.length!==1?'s':''}`;
+            if (!allServices.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-briefcase"></i><p>No services yet.</p></div>`; return; }
+            c.innerHTML = `<table><thead><tr><th>Icon</th><th>Title</th><th>Description</th><th>Actions</th></tr></thead><tbody>
+                ${allServices.map(s=>`<tr>
+                    <td><i class="${escHtml(s.icon)}" style="font-size:24px;color:#ff4321;"></i></td>
+                    <td><strong>${escHtml(s.title)}</strong></td>
+                    <td style="font-size:13px;color:#ccc;max-width:300px;">${escHtml(s.description.substring(0,80))}...</td>
+                    <td><div style="display:flex;gap:8px;">
+                        <button class="btn btn-success btn-sm" onclick="openEditService(${s.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="askDelete(${s.id},'service')"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div></td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        } catch(e) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load.</p></div>`; }
+    }
+    function openAddService() {
+        editSvcId = null;
+        document.getElementById('svc-modal-title').textContent = 'Add Service';
+        document.getElementById('svc-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Service';
+        ['svc-icon','svc-title','svc-description','svc-link'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('svc-link').value  = '#portfolio';
+        document.getElementById('svc-order').value = 1;
+        document.getElementById('svc-status').style.display = 'none';
+        openModal('service-modal');
+    }
+    function openEditService(id) {
+        const s = allServices.find(s=>s.id===id); if (!s) return;
+        editSvcId = id;
+        document.getElementById('svc-modal-title').textContent = 'Edit Service';
+        document.getElementById('svc-save-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Service';
+        document.getElementById('svc-icon').value        = s.icon;
+        document.getElementById('svc-title').value       = s.title;
+        document.getElementById('svc-description').value = s.description;
+        document.getElementById('svc-link').value        = s.link || '#portfolio';
+        document.getElementById('svc-order').value       = s.sort_order;
+        document.getElementById('svc-status').style.display = 'none';
+        openModal('service-modal');
+    }
+    async function saveService() {
+        const icon  = document.getElementById('svc-icon').value.trim();
+        const title = document.getElementById('svc-title').value.trim();
+        const desc  = document.getElementById('svc-description').value.trim();
+        const btn   = document.getElementById('svc-save-btn');
+        if (!icon || !title || !desc) { setStatus('svc-status','error','Please fill in all required fields.'); return; }
+        btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+        try {
+            const data = await apiFetch(editSvcId?`/api/services/${editSvcId}`:'/api/services', editSvcId?'PUT':'POST',
+                { icon, title, description: desc, link: document.getElementById('svc-link').value.trim()||'#portfolio', sort_order: parseInt(document.getElementById('svc-order').value)||0 });
+            if (data.success) { setStatus('svc-status','success',data.message); setTimeout(()=>{ closeModal('service-modal'); loadServices(); },1200); }
+            else setStatus('svc-status','error',data.message);
+        } catch(e) { setStatus('svc-status','error','Could not connect to server.'); }
+        btn.disabled = false; btn.innerHTML = editSvcId?'<i class="fa-solid fa-floppy-disk"></i> Update Service':'<i class="fa-solid fa-floppy-disk"></i> Save Service';
+    }
+
+    // ── Messages ──────────────────────────────
+    async function loadMessages() {
+        const c = document.getElementById('messages-list');
+        c.innerHTML = `<div class="loading"><i class="fa-solid fa-spinner"></i> Loading...</div>`;
+        try {
+            const data = await apiFetch('/api/messages');
+            allMessages = data.data || [];
+            if (!allMessages.length) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No messages yet.</p></div>`; return; }
+            c.innerHTML = allMessages.map(m=>`
+                <div class="message-card ${!m.is_read?'unread':''}">
+                    <div class="message-meta">
+                        <div>
+                            <div class="message-sender">${!m.is_read?'<span class="unread-dot"></span>':''}${escHtml(m.name)}</div>
+                            <div class="message-email">${escHtml(m.email)}</div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span class="message-date">${formatDate(m.received_at)}</span>
+                            ${!m.is_read?`<button class="btn btn-success btn-sm" onclick="markRead(${m.id})"><i class="fa-solid fa-check"></i> Mark Read</button>`:'<span style="color:#4ade80;font-size:12px;"><i class="fa-solid fa-check-double"></i> Read</span>'}
+                            <a href="mailto:${escHtml(m.email)}" class="btn btn-primary btn-sm"><i class="fa-solid fa-reply"></i> Reply</a>
+                        </div>
+                    </div>
+                    ${m.subject?`<div class="message-subject"><i class="fa-solid fa-tag"></i> ${escHtml(m.subject)}</div>`:''}
+                    <div class="message-body">${escHtml(m.message)}</div>
+                </div>`).join('');
+        } catch(e) { c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><p>Failed to load.</p></div>`; }
+    }
+    async function markRead(id) {
+        try { await apiFetch(`/api/messages/${id}/read`,'PUT'); loadMessages(); loadDashboard(); } catch(e) {}
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chathura Madusha | Web Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e5dea4264a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- ========== HEADER / HERO ========== -->
+    <div id="header">
+        <div class="container">
+            <nav>
+                <img src="images/logo" class="logo" alt="Logo">
+                <ul id="sidemenu">
+                    <li><a href="#header">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#portfolio">Projects</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <i class="fa-solid fa-circle-xmark" onclick="closemenu()"></i>
+                </ul>
+                <i class="fa-solid fa-bars" onclick="openmenu()"></i>
+            </nav>
+
+            <div class="header-text">
+                <p class="hero-tag">🎓 Undergraduate &amp; Aspiring Developer</p>
+                <h1>Hi, I'm <span>Chathura</span> Madusha</h1>
+                <p class="hero-sub">Web Developer &amp; UI/UX Enthusiast from Sri Lanka</p>
+                <p class="hero-status"><i class="fa-solid fa-circle-dot pulse"></i> Open to Internship Opportunities</p>
+                <div class="hero-btns">
+                    <a href="#portfolio" class="btn">View My Work</a>
+                    <a href="#contact" class="btn btn-outline">Hire Me</a>
+                </div>
+            </div>
+
+            <div class="img-box">
+                <img src="images/pattern.png" class="back-img" alt="">
+                <img src="images/chathura2.png" class="main-img" alt="Chathura Madusha">
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ABOUT ========== -->
+    <div id="about">
+        <div class="container">
+            <h1 class="sub-title">About Me</h1>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm an undergraduate student at the <strong>Open University of Sri Lanka</strong>, pursuing my degree in Bachelor Software Engineering Honours. I'm passionate about building clean, user-friendly web and mobile applications.
+                    </p>
+                    <p>
+                        Currently seeking an <strong>internship opportunity</strong> where I can contribute my skills, grow as a developer, and gain real-world experience working on meaningful projects.
+                    </p>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <div>
+                                <span>University</span>
+                                <p>Open University of Sri Lanka</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <span>Location</span>
+                                <p>Sri Lanka</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <div>
+                                <span>Email</span>
+                                <p>chathuramadusha20@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <div>
+                                <span>Status</span>
+                                <p>Available for Internship</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="images/my-cv.pdf" download class="btn btn2">
+                        <i class="fa-solid fa-download"></i> Download CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SKILLS ========== -->
+    <div id="skills">
+        <div class="container">
+            <h1 class="sub-title">My Skills</h1>
+            <p class="section-desc">Technologies and tools I work with</p>
+            <div id="skills-container">
+                <div style="text-align:center;padding:40px;color:#ababab;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:32px;"></i>
+                    <p style="margin-top:12px;">Loading skills...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PROJECTS / PORTFOLIO ========== -->
+    <div id="portfolio">
+        <div class="container">
+            <h1 class="sub-title">My Projects</h1>
+            <p class="section-desc">Projects I've built during my studies</p>
+            <div class="work-list" id="projects-container">
+                <div style="text-align:center;padding:40px;color:#ababab;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:32px;"></i>
+                    <p style="margin-top:12px;">Loading projects...</p>
+                </div>
+            </div>
+            <a href="https://github.com/" target="_blank" class="btn">
+                <i class="fa-brands fa-github"></i> View All on GitHub
+            </a>
+        </div>
+    </div>
+
+    <!-- ========== EDUCATION ========== -->
+    <div id="education">
+        <div class="container">
+            <h1 class="sub-title">Education</h1>
+            <p class="section-desc">My academic background</p>
+            <div class="education-timeline" id="education-container">
+                <div style="text-align:center;padding:40px;color:#ababab;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:32px;"></i>
+                    <p style="margin-top:12px;">Loading education...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== WHAT I CAN DO ========== -->
+    <div id="service">
+        <div class="container">
+            <h1 class="sub-title">What I Can Do</h1>
+            <p class="section-desc">Areas I can contribute to as an intern</p>
+            <div class="services-list" id="services-container">
+                <div style="text-align:center;padding:40px;color:#ababab;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:32px;"></i>
+                    <p style="margin-top:12px;">Loading services...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== CONTACT ========== -->
+    <div id="contact">
+        <div class="container">
+            <h1 class="sub-title">Contact Me</h1>
+            <p class="section-desc">Interested in hiring me for an internship? Let's talk.</p>
+            <div class="row">
+                <div class="contact-left">
+                    <div class="contact-detail">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <div>
+                            <span>Email</span>
+                            <p>chathuramadusha20@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <span>Phone</span>
+                            <p>+94 76 840 1413</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <span>Location</span>
+                            <p>Sri Lanka</p>
+                        </div>
+                    </div>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                    <a href="images/my-cv.pdf" download class="btn btn2">
+                        <i class="fa-solid fa-download"></i> Download CV
+                    </a>
+                </div>
+
+                <div class="contact-right">
+                    <form id="contact-form">
+                        <input type="text" id="name" placeholder="Your Name" required>
+                        <input type="email" id="email" placeholder="Your Email" required>
+                        <input type="text" id="subject" placeholder="Subject (e.g. Internship Inquiry)">
+                        <textarea id="message" rows="6" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn btn2" id="submit-btn">
+                            <i class="fa-solid fa-paper-plane"></i> Send Message
+                        </button>
+                        <div id="form-status"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>Copyright © 2025 Chathura Madusha &nbsp;|&nbsp; Designed &amp; Built by Chathura Madusha</p>
+        </div>
+    </div>
+
+    <!-- ========== SCRIPTS ========== -->
+
+    <!-- Mobile Menu -->
+    <script>
+        var sidemenu = document.getElementById("sidemenu");
+        function openmenu() { sidemenu.style.right = "0"; }
+        function closemenu() { sidemenu.style.right = "-200px"; }
+    </script>
+
+    <!-- Contact Form -->
+    <script>
+        const BACKEND_URL = 'http://localhost:3000/contact';
+        const form        = document.getElementById('contact-form');
+        const submitBtn   = document.getElementById('submit-btn');
+        const formStatus  = document.getElementById('form-status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name    = document.getElementById('name').value.trim();
+            const email   = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            formStatus.innerHTML = '';
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method  : 'POST',
+                    headers : { 'Content-Type': 'application/json' },
+                    body    : JSON.stringify({ name, email, subject, message })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    formStatus.innerHTML = `<div class="form-success"><i class="fa-solid fa-circle-check"></i> ${data.message}</div>`;
+                    form.reset();
+                } else {
+                    formStatus.innerHTML = `<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> ${data.message}</div>`;
+                }
+            } catch (err) {
+                formStatus.innerHTML = `<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> Could not connect to server. Please email me directly at chathuramadusha20@gmail.com</div>`;
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+        });
+    </script>
+
+    <!-- Load Projects from Database -->
+    <script>
+        async function loadProjects() {
+            const container = document.getElementById('projects-container');
+            try {
+                const res      = await fetch('http://localhost:3000/api/projects');
+                const data     = await res.json();
+                const projects = data.data || [];
+
+                if (projects.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>No projects yet. Check back soon!</p></div>`;
+                    return;
+                }
+
+                container.innerHTML = projects.map(p => `
+                    <div class="work">
+                        <img src="images/${escHtml(p.image_url || 'work-1.png')}" alt="${escHtml(p.title)}">
+                        <div class="layer">
+                            <span class="work-tag">${escHtml(p.tech_stack)}</span>
+                            <h3>${escHtml(p.title)}</h3>
+                            <p>${escHtml(p.description)}</p>
+                            <div class="work-links">
+                                ${p.live_url   ? `<a href="${escHtml(p.live_url)}"   target="_blank" title="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                                ${p.github_url ? `<a href="${escHtml(p.github_url)}" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>Could not load projects. Please try again later.</p></div>`;
+            }
+        }
+        loadProjects();
+    </script>
+
+    <!-- Load Skills from Database -->
+    <script>
+        async function loadSkills() {
+            const container = document.getElementById('skills-container');
+            try {
+                const res    = await fetch('http://localhost:3000/api/skills');
+                const data   = await res.json();
+                const skills = data.data || [];
+
+                if (skills.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>No skills added yet.</p></div>`;
+                    return;
+                }
+
+                // Group by category
+                const grouped = skills.reduce((acc, skill) => {
+                    if (!acc[skill.category]) acc[skill.category] = [];
+                    acc[skill.category].push(skill);
+                    return acc;
+                }, {});
+
+                // Category icons
+                const icons = {
+                    'Frontend'        : 'fa-solid fa-code',
+                    'Mobile & UI'     : 'fa-solid fa-mobile-screen',
+                    'Backend & Tools' : 'fa-solid fa-database',
+                };
+
+                container.innerHTML = `
+                    <div class="skills-grid">
+                        ${Object.entries(grouped).map(([category, items]) => `
+                            <div class="skill-category">
+                                <h3>
+                                    <i class="${icons[category] || 'fa-solid fa-star'}"></i>
+                                    ${category}
+                                </h3>
+                                <div class="skill-items">
+                                    ${items.map(s => `
+                                        <div class="skill-item">
+                                            <span>${escHtml(s.name)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="tech-tags">
+                        ${skills.map(s => `<span>${escHtml(s.name)}</span>`).join('')}
+                    </div>
+                `;
+
+            } catch (err) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>Could not load skills.</p></div>`;
+            }
+        }
+
+        // Shared HTML escape utility
+        function escHtml(text) {
+            return String(text || '')
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        loadSkills();
+    </script>
+
+    <!-- Load Education from Database -->
+    <script>
+        async function loadEducation() {
+            const container = document.getElementById('education-container');
+            try {
+                const res       = await fetch('http://localhost:3000/api/education');
+                const data      = await res.json();
+                const education = data.data || [];
+
+                if (education.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>No education records yet.</p></div>`;
+                    return;
+                }
+
+                // Icon based on keywords in degree/institution
+                function pickIcon(e) {
+                    const text = (e.degree + ' ' + e.institution).toLowerCase();
+                    if (text.includes('ordinary level') || text.includes('o/l')) return 'fa-solid fa-school';
+                    if (text.includes('advanced level') || text.includes('a/l') || text.includes('physical science')) return 'fa-solid fa-flask';
+                    if (text.includes('english') || text.includes('language') || text.includes('diploma')) return 'fa-solid fa-language';
+                    return 'fa-solid fa-university';
+                }
+
+                container.innerHTML = education.map(e => `
+                    <div class="edu-card">
+                        <div class="edu-icon"><i class="${pickIcon(e)}"></i></div>
+                        <div class="edu-info">
+                            <span class="edu-year">${escHtml(e.year)}</span>
+                            <h3>${escHtml(e.degree)}</h3>
+                            <p class="edu-place">${escHtml(e.institution)}</p>
+                            <p class="edu-desc">${escHtml(e.description)}</p>
+                            ${e.is_current
+                                ? '<span class="edu-badge current">Currently Enrolled</span>'
+                                : '<span class="edu-badge">Completed</span>'}
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>Could not load education.</p></div>`;
+            }
+        }
+        loadEducation();
+    </script>
+
+    <!-- Load Services (What I Can Do) from Database -->
+    <script>
+        async function loadServices() {
+            const container = document.getElementById('services-container');
+            try {
+                const res      = await fetch('http://localhost:3000/api/services');
+                const data     = await res.json();
+                const services = data.data || [];
+
+                if (services.length === 0) {
+                    container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>No services added yet.</p></div>`;
+                    return;
+                }
+
+                container.innerHTML = services.map(s => `
+                    <div>
+                        <i class="${escHtml(s.icon)}"></i>
+                        <h2>${escHtml(s.title)}</h2>
+                        <p>${escHtml(s.description)}</p>
+                        <a href="${escHtml(s.link || '#portfolio')}">See Projects →</a>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;color:#ababab;"><p>Could not load services.</p></div>`;
+            }
+        }
+        loadServices();
+    </script>
+
+</body>
+</html>
